@@ -39,6 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      token: generateToken(user._id),
     });
   } else {
     res.status(400);
@@ -52,16 +53,47 @@ const registerUser = asyncHandler(async (req, res) => {
 //access Public
 
 const LoginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  // Check if user exists
+  const user = await User.findOne({ email });
+
+  if (user && (await bcrypt.compare(password, user.password))) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(401);
+    throw new Error('Invalid email or password');
+  }
+
   res.json({ message: 'Login User' });
 });
 
 // desc get user data
 //route GET /api/users/me
-//access Public
+//access Private
 
 const getMe = asyncHandler(async (req, res) => {
+  const { _id, name, email } = await User.findById(req.user.id);
+  res.status(200).json({
+    id: _id,
+    name,
+    email,
+  });
+
   res.json({ message: 'User data' });
 });
+
+// Generate token
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
 
 module.exports = {
   registerUser,
