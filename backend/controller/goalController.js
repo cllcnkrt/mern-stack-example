@@ -1,8 +1,7 @@
 const asyncHandler = require('express-async-handler');
 
-const Goal = require('../models/goalModal');
-const User = require('../models/userModal');
-
+const Goal = require('../models/goalModel');
+const User = require('../models/userModel');
 // desc Get Goals
 //route GET /api/goals
 //access Private
@@ -45,17 +44,16 @@ const updateGoal = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
 
   //Check user
-  if(!user){
+  if (!user) {
     res.status(401);
     throw new Error('Not found');
   }
 
   //Make sure user owns goal
-  if(user.id.toString() !== goal.user.toString()){
+  if (user.id.toString() !== goal.user.toString()) {
     res.status(401);
     throw new Error('Not authorized');
   }
-
 
   const updatedGoal = await Goal.findByIdAndUpdate(
     req.params.id,
@@ -77,22 +75,19 @@ const deleteGoal = asyncHandler(async (req, res) => {
     throw new Error('Goal not found');
   }
 
-
-  
   const user = await User.findById(req.user.id);
 
   //Check user
-  if(!user){
+  if (!user) {
     res.status(401);
     throw new Error('Not found');
   }
 
   //Make sure user owns goal
-  if(user.id.toString() !== goal.user.toString()){
+  if (user.id.toString() !== goal.user.toString()) {
     res.status(401);
     throw new Error('Not authorized');
   }
-
 
   await goal.remove();
   res.status(200).json({ id: req.params.id });
