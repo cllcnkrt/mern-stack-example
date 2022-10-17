@@ -1,5 +1,5 @@
-import { FormEvent, useState } from 'react';
-import { FaSignInAlt } from 'react-icons/fa';
+import { FormEvent, useState } from "react";
+import { FaSignInAlt } from "react-icons/fa";
 
 interface form {
   email: string;
@@ -8,8 +8,8 @@ interface form {
 
 function Login() {
   const [formData, setFormData] = useState<form>({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const { email, password } = formData;

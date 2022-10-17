@@ -1,5 +1,6 @@
-import { FormEvent, useState } from 'react';
-import { FaUser } from 'react-icons/fa';
+import { FormEvent, useState } from "react";
+import { FaUser } from "react-icons/fa";
+import { useAppDispatch } from "../../redux/store/hooks";
 
 interface form {
   name: string;
@@ -9,11 +10,12 @@ interface form {
 }
 
 function Register() {
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<form>({
-    name: '',
-    email: '',
-    password: '',
-    password2: '',
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
   });
 
   const { name, email, password, password2 } = formData;

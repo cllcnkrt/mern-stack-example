@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface GoalState {}
 
 const initialState = {} as GoalState;
 
 export const GoalsSlice = createSlice({
-  name: 'goals',
+  name: "goals",
   initialState,
   reducers: {},
 });

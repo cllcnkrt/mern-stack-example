@@ -1,6 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Login, Register, Dashboard } from './pages';
-import { Header } from './components';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Header } from "./components";
+import { Dashboard, Login, Register } from "./pages";
+
 function App() {
   return (
     <>
