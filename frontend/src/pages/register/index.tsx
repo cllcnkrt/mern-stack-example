@@ -1,8 +1,12 @@
 import { FormEvent, useState } from "react";
 import { FaUser } from "react-icons/fa";
-import { useAppDispatch } from "../../redux/store/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { register, reset } from "../../redux/slices/auth";
+import { selectAuthState } from "../../redux/store/store";
 
-interface form {
+interface formType {
   name: string;
   email: string;
   password: string;
@@ -11,7 +15,11 @@ interface form {
 
 function Register() {
   const dispatch = useAppDispatch();
-  const [formData, setFormData] = useState<form>({
+  const navigate = useNavigate();
+
+  const { user, loading, message } = useAppSelector(selectAuthState);
+
+  const [formData, setFormData] = useState<formType>({
     name: "",
     email: "",
     password: "",
@@ -19,7 +27,6 @@ function Register() {
   });
 
   const { name, email, password, password2 } = formData;
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -28,8 +35,18 @@ function Register() {
   };
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  };
 
+    if (password !== password2) {
+      toast.error("Passwords do not match");
+    } else {
+      const userData = {
+        name,
+        email,
+        password,
+      };
+      dispatch(register(userData));
+    }
+  };
   return (
     <>
       <section className="heading">

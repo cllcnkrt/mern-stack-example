@@ -2,7 +2,7 @@ import axios from "axios";
 import { IAuth } from "../../redux/slices/auth/IAuth";
 const API_URL = "/api/users";
 
-const register = async (userData: IAuth.State) => {
+const register = async (userData: IAuth.User) => {
   const response = await axios.post(API_URL, userData);
 
   if (response.data) {

@@ -1,8 +1,14 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authService from "../../../services/auth";
 import { IAuth } from "./IAuth";
 
-const register = createAsyncThunk("auth/register", async (user: IAuth.State, thunkAPI) => {
+export const register = createAsyncThunk<
+  IAuth.User,
+  IAuth.User,
+  {
+    rejectValue: string;
+  }
+>("auth/register", async (user: IAuth.User, thunkAPI) => {
   try {
     return await authService.register(user);
   } catch (err: any) {
@@ -13,11 +19,11 @@ const register = createAsyncThunk("auth/register", async (user: IAuth.State, thu
 
 const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-const initialState = {
+const initialState: IAuth.State = {
   user: user ? user : null,
   loading: "idle",
   message: "",
-} as IAuth.State;
+};
 
 const AuthSlice = createSlice({
   name: "auth",
@@ -52,5 +58,5 @@ const AuthSlice = createSlice({
 
 export const { reset } = AuthSlice.actions;
 export const { actions, reducer } = AuthSlice;
-export const selectUser = (state: IAuth.State) => state.user;
+export const selectAuth = (state: IAuth.State) => state;
 export default AuthSlice.reducer;

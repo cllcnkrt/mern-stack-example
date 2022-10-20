@@ -1,6 +1,6 @@
 export declare module IAuth {
   interface State {
-    user: null | User;
+    user: User | null;
     loading: "idle" | "pending" | "succeeded" | "failed";
     message: string;
   }
