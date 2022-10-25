@@ -17,11 +17,10 @@ export const register = createAsyncThunk<
     return thunkAPI.rejectWithValue(message);
   }
 });
-
-// const user = JSON.parse(localStorage.getItem("user") || "{}");
+const user = JSON.parse(localStorage.getItem("user") || "{}");
 
 const initialState: IAuth.State = {
-  user: null,
+  user: user ? user : null,
   loading: "idle",
 };
 

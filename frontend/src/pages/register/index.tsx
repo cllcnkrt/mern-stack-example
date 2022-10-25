@@ -36,6 +36,8 @@ function Register() {
       toast.success("Registration successful");
       navigate("/");
     }
+
+    dispatch(reset());
   }, [loading, user, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
