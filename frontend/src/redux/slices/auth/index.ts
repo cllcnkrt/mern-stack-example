@@ -1,4 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 import authService from "../../../services/auth";
 import { IAuth } from "./IAuth";
 
@@ -17,12 +18,11 @@ export const register = createAsyncThunk<
   }
 });
 
-const user = JSON.parse(localStorage.getItem("user") || "{}");
+// const user = JSON.parse(localStorage.getItem("user") || "{}");
 
 const initialState: IAuth.State = {
-  user: user ? user : null,
+  user: null,
   loading: "idle",
-  message: "",
 };
 
 const AuthSlice = createSlice({
@@ -33,7 +33,6 @@ const AuthSlice = createSlice({
     reset: (state) => {
       state.user = null;
       state.loading = "idle";
-      state.message = "";
     },
   },
   extraReducers: (builder) => {
@@ -41,17 +40,14 @@ const AuthSlice = createSlice({
       .addCase(register.pending, (state) => {
         state.loading = "pending";
         state.user = null;
-        state.message = "";
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.user = action.payload;
-        state.message = "";
       })
-      .addCase(register.rejected, (state, action) => {
+      .addCase(register.rejected, (state) => {
         state.loading = "failed";
         state.user = null;
-        state.message = action.payload as string;
       });
   },
 });

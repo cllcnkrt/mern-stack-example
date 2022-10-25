@@ -1,11 +1,9 @@
 function Spinner() {
-  return <div className="loadingSpinnerContainer">
-    
-
-    <div className="loaadingSpinner">
-      
+  return (
+    <div className="loadingSpinnerContainer">
+      <div className="loaadingSpinner"></div>
     </div>
-  </div>;
+  );
 }
 
 export default Spinner;

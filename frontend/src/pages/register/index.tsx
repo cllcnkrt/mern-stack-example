@@ -1,11 +1,12 @@
 import { FormEvent, useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
-import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { register, reset } from "../../redux/slices/auth";
-import { selectAuthState } from "../../redux/store/store";
+
 import { Spinner } from "../../components/";
+import { register, reset } from "../../redux/slices/auth";
+import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
+import { selectAuthState } from "../../redux/store/store";
 interface formTypes {
   name: string;
   email: string;
@@ -17,7 +18,7 @@ function Register() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { user, loading, message } = useAppSelector(selectAuthState);
+  const { user, loading } = useAppSelector(selectAuthState);
 
   const [formData, setFormData] = useState<formTypes>({
     name: "",
@@ -29,15 +30,13 @@ function Register() {
   const { name, email, password, password2 } = formData;
   useEffect(() => {
     if (loading === "failed") {
-      toast.error(message);
+      toast.error("Something went wrong");
     }
     if (loading === "succeeded" || user) {
-      toast.success(message);
+      toast.success("Registration successful");
       navigate("/");
     }
-
-    dispatch(reset());
-  }, [loading, message, user, navigate]);
+  }, [loading, user, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -51,20 +50,17 @@ function Register() {
     if (password !== password2) {
       toast.error("Passwords do not match");
     } else {
-      // const userData = {
-      //   name,
-      //   email,
-      //   password,
-      // };
-      // dispatch(register(userData));
-      console.log("gitti");
+      const userData = {
+        name,
+        email,
+        password,
+      };
+      dispatch(register(userData));
     }
   };
 
   if (loading === "pending") return <Spinner />;
-  useEffect(() => {
-    console.log("loading", loading);
-  }, [loading]);
+
   return (
     <>
       <section className="heading">

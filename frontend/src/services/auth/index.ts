@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { IAuth } from "../../redux/slices/auth/IAuth";
 const API_URL = "/api/users";
 
