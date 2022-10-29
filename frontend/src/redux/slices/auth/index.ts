@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authService from "../../../services/auth";
 import { IAuth } from "./IAuth";
 
+//Register
 export const register = createAsyncThunk<
   IAuth.User,
   IAuth.User,
@@ -12,6 +13,22 @@ export const register = createAsyncThunk<
 >("auth/register", async (user: IAuth.User, thunkAPI) => {
   try {
     return await authService.register(user);
+  } catch (err: any) {
+    const message = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+//LOGIN
+export const login = createAsyncThunk<
+  IAuth.User,
+  IAuth.User,
+  {
+    rejectValue: string;
+  }
+>("auth/login", async (user: IAuth.User, thunkAPI) => {
+  try {
+    return await authService.login(user);
   } catch (err: any) {
     const message = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
     return thunkAPI.rejectWithValue(message);
@@ -43,6 +60,7 @@ const AuthSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      //Register
       .addCase(register.pending, (state) => {
         state.loading = "pending";
         state.user = null;
@@ -58,6 +76,23 @@ const AuthSlice = createSlice({
         state.user = null;
         state.errorMessage = action.payload as string;
       })
+      //LOGIN
+      .addCase(login.pending, (state) => {
+        state.loading = "pending";
+        state.user = null;
+        state.errorMessage = "";
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.user = action.payload;
+        state.errorMessage = "";
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.loading = "failed";
+        state.user = null;
+        state.errorMessage = action.payload as string;
+      })
+      //LOGOUT
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
       });
