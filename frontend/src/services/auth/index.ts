@@ -5,7 +5,7 @@ import { IAuth } from "../../redux/slices/auth/IAuth";
 const API_URL = "/api/users/";
 
 //Register
-const register = async (userData: IAuth.User) => {
+const register = async (userData: IAuth.RegisterPayload) => {
   const response = await axios.post(API_URL, userData);
 
   if (response.data) {
@@ -16,9 +16,8 @@ const register = async (userData: IAuth.User) => {
 };
 
 //Login
-const login = async (userData: IAuth.User) => {
+const login = async (userData: IAuth.LoginPayload) => {
   const response = await axios.post(API_URL + "login", userData);
-
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }

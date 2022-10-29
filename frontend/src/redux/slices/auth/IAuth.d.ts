@@ -1,12 +1,17 @@
 export declare namespace IAuth {
   interface State {
-    user: User | null;
+    user: RegisterPayload | LoginPayload | null;
     loading: "idle" | "pending" | "succeeded" | "failed";
     errorMessage: string;
   }
 
-  interface User {
+  interface RegisterPayload {
     name: string;
+    email: string;
+    password: string;
+  }
+
+  interface LoginPayload {
     email: string;
     password: string;
   }

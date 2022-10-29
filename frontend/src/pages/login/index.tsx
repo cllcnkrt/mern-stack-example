@@ -1,12 +1,24 @@
 import { FormEvent, useState } from "react";
+import { useEffect } from "react";
 import { FaSignInAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
+import { Spinner } from "../../components";
+import { login, reset } from "../../redux/slices/auth";
+import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
+import { selectAuthState } from "../../redux/store/store";
 interface form {
   email: string;
   password: string;
 }
 
 function Login() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { user, loading, errorMessage } = useAppSelector(selectAuthState);
+
   const [formData, setFormData] = useState<form>({
     email: "",
     password: "",
@@ -14,16 +26,34 @@ function Login() {
 
   const { email, password } = formData;
 
+  useEffect(() => {
+    if (loading === "failed") {
+      toast.error(errorMessage);
+    }
+    if (loading === "succeeded" || user) {
+      toast.success("Login successful");
+      navigate("/");
+    }
+  }, [loading, user, navigate, dispatch]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const userData = {
+      email,
+      password,
+    };
+    dispatch(login(userData));
   };
 
+  if (loading === "pending") return <Spinner />;
   return (
     <>
       <section className="heading">

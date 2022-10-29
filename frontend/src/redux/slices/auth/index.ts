@@ -5,12 +5,12 @@ import { IAuth } from "./IAuth";
 
 //Register
 export const register = createAsyncThunk<
-  IAuth.User,
-  IAuth.User,
+  IAuth.RegisterPayload,
+  IAuth.RegisterPayload,
   {
     rejectValue: string;
   }
->("auth/register", async (user: IAuth.User, thunkAPI) => {
+>("auth/register", async (user: IAuth.RegisterPayload, thunkAPI) => {
   try {
     return await authService.register(user);
   } catch (err: any) {
@@ -21,12 +21,12 @@ export const register = createAsyncThunk<
 
 //LOGIN
 export const login = createAsyncThunk<
-  IAuth.User,
-  IAuth.User,
+  IAuth.LoginPayload,
+  IAuth.LoginPayload,
   {
     rejectValue: string;
   }
->("auth/login", async (user: IAuth.User, thunkAPI) => {
+>("auth/login", async (user: IAuth.LoginPayload, thunkAPI) => {
   try {
     return await authService.login(user);
   } catch (err: any) {
@@ -39,7 +39,7 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   await authService.logout();
 });
 
-const user = JSON.parse(localStorage.getItem("user") || "{}");
+const user = JSON.parse(localStorage.getItem("user") as string);
 
 const initialState: IAuth.State = {
   user: user ? user : null,
