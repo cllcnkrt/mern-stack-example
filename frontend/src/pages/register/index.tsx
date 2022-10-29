@@ -18,7 +18,7 @@ function Register() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { user, loading } = useAppSelector(selectAuthState);
+  const { user, loading, errorMessage } = useAppSelector(selectAuthState);
 
   const [formData, setFormData] = useState<formTypes>({
     name: "",
@@ -30,14 +30,17 @@ function Register() {
   const { name, email, password, password2 } = formData;
   useEffect(() => {
     if (loading === "failed") {
-      toast.error("Something went wrong");
+      toast.error(errorMessage);
     }
     if (loading === "succeeded") {
-      toast.success("Registration successful");
       navigate("/");
     }
     if (!loading) dispatch(reset());
   }, [loading, user, navigate, dispatch]);
+
+  const resetHandle = () => {
+    dispatch(reset());
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -70,7 +73,7 @@ function Register() {
         </h1>
         <p>Please create an account</p>
       </section>
-
+      <button onClick={resetHandle}>reset</button>
       <section className="form">
         <form onSubmit={onSubmit}>
           <div className="form-group">

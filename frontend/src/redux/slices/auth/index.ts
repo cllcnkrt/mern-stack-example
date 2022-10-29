@@ -22,6 +22,7 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
 const initialState: IAuth.State = {
   user: user ? user : null,
   loading: "idle",
+  errorMessage: "",
 };
 
 const AuthSlice = createSlice({
@@ -32,6 +33,7 @@ const AuthSlice = createSlice({
     reset: (state) => {
       state.user = null;
       state.loading = "idle";
+      state.errorMessage = "";
     },
   },
   extraReducers: (builder) => {
@@ -39,14 +41,18 @@ const AuthSlice = createSlice({
       .addCase(register.pending, (state) => {
         state.loading = "pending";
         state.user = null;
+        state.errorMessage = "";
       })
       .addCase(register.fulfilled, (state, action) => {
+        console.log("action.payload", action.payload);
         state.loading = "succeeded";
         state.user = action.payload;
+        state.errorMessage = "";
       })
-      .addCase(register.rejected, (state) => {
+      .addCase(register.rejected, (state, action) => {
         state.loading = "failed";
         state.user = null;
+        state.errorMessage = action.payload as string;
       });
   },
 });
