@@ -17,6 +17,11 @@ export const register = createAsyncThunk<
     return thunkAPI.rejectWithValue(message);
   }
 });
+
+export const logout = createAsyncThunk("auth/logout", async () => {
+  await authService.logout();
+});
+
 const user = JSON.parse(localStorage.getItem("user") || "{}");
 
 const initialState: IAuth.State = {
@@ -44,7 +49,6 @@ const AuthSlice = createSlice({
         state.errorMessage = "";
       })
       .addCase(register.fulfilled, (state, action) => {
-        console.log("action.payload", action.payload);
         state.loading = "succeeded";
         state.user = action.payload;
         state.errorMessage = "";
@@ -53,6 +57,9 @@ const AuthSlice = createSlice({
         state.loading = "failed";
         state.user = null;
         state.errorMessage = action.payload as string;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
       });
   },
 });

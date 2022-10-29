@@ -32,15 +32,13 @@ function Register() {
     if (loading === "failed") {
       toast.error(errorMessage);
     }
-    if (loading === "succeeded") {
+    if (loading === "succeeded" || user) {
+      toast.success("Registration successful");
       navigate("/");
     }
-    if (!loading) dispatch(reset());
-  }, [loading, user, navigate, dispatch]);
 
-  const resetHandle = () => {
     dispatch(reset());
-  };
+  }, [loading, user, navigate, dispatch]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -73,7 +71,6 @@ function Register() {
         </h1>
         <p>Please create an account</p>
       </section>
-      <button onClick={resetHandle}>reset</button>
       <section className="form">
         <form onSubmit={onSubmit}>
           <div className="form-group">
