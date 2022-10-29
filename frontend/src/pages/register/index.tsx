@@ -32,13 +32,12 @@ function Register() {
     if (loading === "failed") {
       toast.error("Something went wrong");
     }
-    if (loading === "succeeded" || user) {
+    if (loading === "succeeded") {
       toast.success("Registration successful");
       navigate("/");
     }
-
-    dispatch(reset());
-  }, [loading, user, navigate]);
+    if (!loading) dispatch(reset());
+  }, [loading, user, navigate, dispatch]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
