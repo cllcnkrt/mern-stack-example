@@ -8,7 +8,6 @@ const User = require('../models/userModel');
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
-  console.log('geldiii');
   if (!name || !email || !password) {
     res.status(400);
     throw new Error('Please add all fields');
@@ -76,14 +75,7 @@ const loginUser = asyncHandler(async (req, res) => {
 //access Private
 
 const getMe = asyncHandler(async (req, res) => {
-  const { _id, name, email } = await User.findById(req.user.id);
-  res.status(200).json({
-    id: _id,
-    name,
-    email,
-  });
-
-  res.json({ message: 'User data' });
+  res.status(200).json(req.user);
 });
 
 // Generate token
