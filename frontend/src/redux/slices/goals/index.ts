@@ -21,6 +21,23 @@ export const createGoal = createAsyncThunk<
   }
 });
 
+// Get all goals
+export const getGoals = createAsyncThunk<
+  GoalModel.Goal.Response[],
+  void,
+  {
+    rejectValue: string;
+  }
+>("goals/getAll", async (_, thunkAPI: any) => {
+  try {
+    const token = thunkAPI.getState().auth.user.token;
+    return await goalService.getGoals(token);
+  } catch (err: any) {
+    const message = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState: IGoals.State = {
   goals: [],
   loading: "idle",
@@ -40,19 +57,34 @@ const GoalsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Create goal
       .addCase(createGoal.pending, (state) => {
         state.loading = "pending";
-        state.goals = [];
         state.errorMessage = "";
       })
-      .addCase(createGoal.fulfilled, (state, action: PayloadAction<GoalModel.Goal.Request>) => {
+      .addCase(createGoal.fulfilled, (state, action: PayloadAction<GoalModel.Goal.Response>) => {
         state.loading = "succeeded";
-        state.goals.push(action.payload);
+        console.log("action.payload", action.payload);
+        state.goals = [...state.goals, action.payload];
         state.errorMessage = "";
       })
       .addCase(createGoal.rejected, (state, action) => {
         state.loading = "failed";
+        state.errorMessage = action.payload as string;
+      })
+      // Get all goals
+      .addCase(getGoals.pending, (state) => {
+        state.loading = "pending";
         state.goals = [];
+        state.errorMessage = "";
+      })
+      .addCase(getGoals.fulfilled, (state, action: PayloadAction<GoalModel.Goal.Response[]>) => {
+        state.loading = "succeeded";
+        state.goals = action.payload;
+        state.errorMessage = "";
+      })
+      .addCase(getGoals.rejected, (state, action) => {
+        state.loading = "failed";
         state.errorMessage = action.payload as string;
       });
   },
