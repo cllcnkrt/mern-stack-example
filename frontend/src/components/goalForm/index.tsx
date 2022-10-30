@@ -1,13 +1,11 @@
 import { useState } from "react";
 
 import { createGoal } from "../../redux/slices/goals";
-import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
-import { selectGoalsState } from "../../redux/store/store";
+import { useAppDispatch } from "../../redux/store/hooks";
 
 function GoalForm() {
   const dispatch = useAppDispatch();
   const [text, setText] = useState("");
-  const { goals } = useAppSelector(selectGoalsState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
