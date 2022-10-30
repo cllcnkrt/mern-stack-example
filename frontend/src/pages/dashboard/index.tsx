@@ -28,7 +28,7 @@ function Dashboard() {
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, errorMessage, navigate, user]);
+  }, []);
 
   if (loading === "pending") {
     return <Spinner />;

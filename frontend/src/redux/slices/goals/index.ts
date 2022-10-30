@@ -49,11 +49,7 @@ const GoalsSlice = createSlice({
 
   initialState,
   reducers: {
-    reset: (state) => {
-      state.goals = [];
-      state.loading = "idle";
-      state.errorMessage = "";
-    },
+    reset: () => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -75,8 +71,6 @@ const GoalsSlice = createSlice({
       // Get all goals
       .addCase(getGoals.pending, (state) => {
         state.loading = "pending";
-        state.goals = [];
-        state.errorMessage = "";
       })
       .addCase(getGoals.fulfilled, (state, action: PayloadAction<GoalModel.Goal.Response[]>) => {
         state.loading = "succeeded";
