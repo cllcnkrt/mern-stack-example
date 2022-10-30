@@ -38,6 +38,22 @@ export const getGoals = createAsyncThunk<
   }
 });
 
+export const deleteGoal = createAsyncThunk<
+  GoalModel.Goal.Response,
+  string,
+  {
+    rejectValue: string;
+  }
+>("goals/delete", async (id: string, thunkAPI: any) => {
+  try {
+    const token = thunkAPI.getState().auth.user.token;
+    return await goalService.deleteGoal(id, token);
+  } catch (err: any) {
+    const message = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState: IGoals.State = {
   goals: [],
   loading: "idle",
@@ -78,6 +94,19 @@ const GoalsSlice = createSlice({
         state.errorMessage = "";
       })
       .addCase(getGoals.rejected, (state, action) => {
+        state.loading = "failed";
+        state.errorMessage = action.payload as string;
+      })
+      // Delete goal
+      .addCase(deleteGoal.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(deleteGoal.fulfilled, (state, action: PayloadAction<GoalModel.Goal.Response>) => {
+        state.loading = "succeeded";
+        state.goals = state.goals.filter((goal) => goal._id !== action.payload._id);
+        state.errorMessage = "";
+      })
+      .addCase(deleteGoal.rejected, (state, action) => {
         state.loading = "failed";
         state.errorMessage = action.payload as string;
       });
