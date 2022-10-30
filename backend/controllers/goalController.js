@@ -1,7 +1,6 @@
 const asyncHandler = require('express-async-handler');
 
 const Goal = require('../models/goalModel');
-const User = require('../models/userModel');
 // desc Get Goals
 //route GET /api/goals
 //access Private
@@ -41,7 +40,6 @@ const updateGoal = asyncHandler(async (req, res) => {
     throw new Error('Goal not found');
   }
 
-
   //Check user
   if (!req.user) {
     res.status(401);
@@ -73,7 +71,6 @@ const deleteGoal = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Goal not found');
   }
-
 
   //Check user
   if (!req.user) {

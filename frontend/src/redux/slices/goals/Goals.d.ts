@@ -1,7 +1,10 @@
 export declare namespace IGoals {
   interface State {
-    goals: [];
+    goals: object[];
     loading: "idle" | "pending" | "succeeded" | "failed";
     errorMessage: string;
   }
+
+
+  
 }

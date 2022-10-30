@@ -1,9 +1,18 @@
 import axios from "axios";
 
-const API_URL = "/api/users/";
+import { GoalModel } from "./GoalModel";
+
+const API_URL = "/api/goals/";
+
 export const goalService = {
-  getGoals: async (user: any) => {
-    const response = await axios.get(API_URL + "goals", user);
+  createGoal: async (payload: GoalModel.Goal.Request, token: string) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.post(API_URL, payload, config);
     return response.data;
   },
 };

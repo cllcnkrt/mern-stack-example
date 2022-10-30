@@ -15,7 +15,6 @@ export const register = createAsyncThunk("auth/register", async (payload: IAuth.
 
 //LOGIN
 export const login = createAsyncThunk("auth/login", async (payload: IAuth.LoginRequest, thunkAPI) => {
-  console.log("payload", payload);
   try {
     return await authService.login(payload);
   } catch (err: any) {

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { GoalForm } from "../../components";
 import { useAppSelector } from "../../redux/store/hooks";
 import { selectAuthState } from "../../redux/store/store";
 
@@ -18,8 +19,9 @@ function Dashboard() {
   return (
     <>
       <section className="heading">
-        <h1>Welcome user</h1>
+        <h1>Welcome {user && user.name}</h1>
       </section>
+      <GoalForm />
     </>
   );
 }

@@ -1,18 +1,20 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { goalService } from "../../../services";
+import { GoalModel } from "../../../services/goal/GoalModel";
 import { IGoals } from "./Goals";
 
-//Register
-export const getGoals = createAsyncThunk<
-  IGoals.State,
-  IGoals.State,
+// Create new goal
+export const createGoal = createAsyncThunk<
+  GoalModel.Goal.Response,
+  GoalModel.Goal.Request,
   {
     rejectValue: string;
   }
->("user", async (user: IGoals.State, thunkAPI) => {
+>("goals/create", async (payload: GoalModel.Goal.Request, thunkAPI: any) => {
   try {
-    return await goalService.getGoals(user);
+    const token = thunkAPI.getState().auth.user.token;
+    return await goalService.createGoal(payload, token);
   } catch (err: any) {
     const message = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
     return thunkAPI.rejectWithValue(message);
@@ -25,13 +27,7 @@ const initialState: IGoals.State = {
   errorMessage: "",
 };
 
-export const GoalsSlice = createSlice({
-  name: "goals",
-  initialState,
-  reducers: {},
-});
-
-const GoalSlice = createSlice({
+const GoalsSlice = createSlice({
   name: "goals",
 
   initialState,
@@ -44,17 +40,17 @@ const GoalSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getGoals.pending, (state) => {
+      .addCase(createGoal.pending, (state) => {
         state.loading = "pending";
         state.goals = [];
         state.errorMessage = "";
       })
-      .addCase(getGoals.fulfilled, (state, action) => {
+      .addCase(createGoal.fulfilled, (state, action: PayloadAction<GoalModel.Goal.Request>) => {
         state.loading = "succeeded";
-        state.goals = action.payload.goals;
+        state.goals.push(action.payload);
         state.errorMessage = "";
       })
-      .addCase(getGoals.rejected, (state, action) => {
+      .addCase(createGoal.rejected, (state, action) => {
         state.loading = "failed";
         state.goals = [];
         state.errorMessage = action.payload as string;
@@ -62,8 +58,8 @@ const GoalSlice = createSlice({
   },
 });
 
-export const { reset } = GoalSlice.actions;
-export const { actions, reducer } = GoalSlice;
+export const { reset } = GoalsSlice.actions;
+export const { actions, reducer } = GoalsSlice;
 
 export const selectGoals = (state: IGoals.State) => state;
 export default GoalsSlice.reducer;
