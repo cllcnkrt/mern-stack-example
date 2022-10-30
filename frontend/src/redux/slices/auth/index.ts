@@ -4,15 +4,9 @@ import { authService } from "../../../services/auth";
 import { IAuth } from "./Auth";
 
 //Register
-export const register = createAsyncThunk<
-  IAuth.RegisterPayload,
-  IAuth.RegisterPayload,
-  {
-    rejectValue: string;
-  }
->("auth/register", async (user: IAuth.RegisterPayload, thunkAPI) => {
+export const register = createAsyncThunk("auth/register", async (payload: IAuth.RegisterRequest, thunkAPI) => {
   try {
-    return await authService.register(user);
+    return await authService.register(payload);
   } catch (err: any) {
     const message = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
     return thunkAPI.rejectWithValue(message);
@@ -20,15 +14,10 @@ export const register = createAsyncThunk<
 });
 
 //LOGIN
-export const login = createAsyncThunk<
-  IAuth.LoginPayload,
-  IAuth.LoginPayload,
-  {
-    rejectValue: string;
-  }
->("auth/login", async (user: IAuth.LoginPayload, thunkAPI) => {
+export const login = createAsyncThunk("auth/login", async (payload: IAuth.LoginRequest, thunkAPI) => {
+  console.log("payload", payload);
   try {
-    return await authService.login(user);
+    return await authService.login(payload);
   } catch (err: any) {
     const message = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
     return thunkAPI.rejectWithValue(message);

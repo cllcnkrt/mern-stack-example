@@ -15,7 +15,13 @@ function Dashboard() {
     }
   }, [user]);
 
-  return <div>Dashboard</div>;
+  return (
+    <>
+      <section className="heading">
+        <h1>Welcome user</h1>
+      </section>
+    </>
+  );
 }
 
 export default Dashboard;

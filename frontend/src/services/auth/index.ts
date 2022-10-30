@@ -1,14 +1,13 @@
 import axios from "axios";
 
-import { IAuth } from "../../redux/slices/auth/Auth";
+import { AuthModel } from "./AuthModel";
 
 const API_URL = "/api/users/";
 
 //Register
-
 export const authService = {
-  register: async (userData: IAuth.RegisterPayload) => {
-    const response = await axios.post(API_URL, userData);
+  register: async (payload: AuthModel.Auth.RegisterRequest) => {
+    const response = await axios.post(API_URL, payload);
 
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -18,9 +17,9 @@ export const authService = {
   },
 
   //Login
-  login: async (userData: IAuth.LoginPayload) => {
-    const response = await axios.post(API_URL + "login", userData);
-    
+  login: async (payload: AuthModel.Auth.LoginRequest) => {
+    const response = await axios.post(API_URL + "login", payload);
+
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));
     }
